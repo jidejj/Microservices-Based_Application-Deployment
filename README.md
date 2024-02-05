@@ -44,6 +44,7 @@ The project directory structure is organized as follows:
         ├── outputs.tf
         └── variables.tf
 
+~~~
 ## Project Components
 - Ansible: Used for configuration management and automation.
 - Terraform: Used for provisioning infrastructure on AWS.
