@@ -1,0 +1,30 @@
+---
+- name: Deploy Microservices to Kubernetes
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Set Kubernetes Context
+      k8s_raw:
+        kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
+        resource:
+          apiVersion: v1
+          kind: Config
+          preferences: {}
+          current-context: "{{ lookup('env', 'KUBE_CONTEXT') }}"
+          clusters:
+            - name: "{{ lookup('env', 'KUBE_CLUSTER_NAME') }}"
+              cluster:
+                certificate-authority-data: "{{ lookup('env', 'KUBE_CA_CERT') }}"
+                server: "{{ lookup('env', 'KUBE_SERVER') }}"
+          contexts:
+            - name: "{{ lookup('env', 'KUBE_CONTEXT') }}"
+              context:
+                cluster: "{{ lookup('env', 'KUBE_CLUSTER_NAME') }}"
+                user: "{{ lookup('env', 'KUBE_USER') }}"
+          users:
+            - name: "{{ lookup('env', 'KUBE_USER') }}"
+              user:
+                token: "{{ lookup('env', 'KUBE_TOKEN') }}"
+        state: present
+
+    # Add more tasks to deploy microservices here

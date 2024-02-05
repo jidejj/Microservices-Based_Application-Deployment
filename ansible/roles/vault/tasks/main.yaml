@@ -1,0 +1,12 @@
+---
+- name: Encrypt secrets file
+  ansible.builtin.command: ansible-vault encrypt secrets.yml --vault-password-file .ansible-vault-pass
+  environment:
+    VAULT_PASS_FILE: "{{ playbook_dir }}/.ansible-vault-pass"
+
+- name: Decrypt secrets file
+  ansible.builtin.command: ansible-vault decrypt secrets.yml --vault-password-file .ansible-vault-pass
+  environment:
+    VAULT_PASS_FILE: "{{ playbook_dir }}/.ansible-vault-pass"
+
+# Add more tasks for managing secrets with Ansible Vault as needed

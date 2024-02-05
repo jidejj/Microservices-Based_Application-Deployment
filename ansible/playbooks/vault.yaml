@@ -1,0 +1,11 @@
+---
+- name: Manage Secrets with Ansible Vault
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Decrypt Secrets
+      ansible.builtin.command: ansible-vault decrypt secrets.yml --vault-password-file .ansible-vault-pass
+      environment:
+        VAULT_PASS_FILE: "{{ playbook_dir }}/.ansible-vault-pass"
+
+    # Add more tasks to manage secrets here

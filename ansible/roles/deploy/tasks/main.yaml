@@ -1,0 +1,6 @@
+---
+- name: Deploy microservices to Kubernetes
+  k8s:
+    state: "{{ state }}"
+    definition: "{{ item }}"
+  loop: "{{ microservices }}"

@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: sock-shop-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: sock-shop
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: sock-shop
+  egress:
+  - to:
+    - podSelector: {}

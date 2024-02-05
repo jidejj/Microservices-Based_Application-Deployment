@@ -1,0 +1,11 @@
+---
+- name: Install required packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - package1
+    - package2
+    - package3
+
+# Add more common tasks as needed

@@ -1,0 +1,4 @@
+apiVersion: v2
+name: sock-shop
+description: A Helm chart for deploying the Socks Shop microservices application
+version: 0.1.0
