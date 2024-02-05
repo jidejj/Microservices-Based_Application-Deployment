@@ -7,5 +7,34 @@
       ansible.builtin.command: ansible-vault decrypt secrets.yml --vault-password-file .ansible-vault-pass
       environment:
         VAULT_PASS_FILE: "{{ playbook_dir }}/.ansible-vault-pass"
+      register: decrypt_output
+      ignore_errors: yes
 
-    # Add more tasks to manage secrets here
+    - name: Edit Decrypted Secrets (Optional)
+      ansible.builtin.command: vi secrets.yml
+      when: decrypt_output.rc == 0
+
+    - name: Encrypt Secrets
+      ansible.builtin.command: ansible-vault encrypt secrets.yml --vault-password-file .ansible-vault-pass
+      when: decrypt_output.rc == 0
+
+    - name: Create Namespace (if not exists)
+      kubernetes.core.k8s_namespace:
+        name: sock-shop
+      ignore_errors: yes
+
+    - name: Deploy Encrypted Secrets to Kubernetes Secrets
+      kubernetes.core.k8s_secret:
+        name: my-secrets
+        namespace: sock-shop
+        data:
+          secrets.yml: "{{ lookup('file', 'secrets.yml') }}"
+      when: decrypt_output.rc == 0
+
+    - name: Clean Up Decrypted Secrets
+      ansible.builtin.file:
+        path: "{{ playbook_dir }}/secrets.yml"
+        state: absent
+      when: decrypt_output.rc == 0
+
+

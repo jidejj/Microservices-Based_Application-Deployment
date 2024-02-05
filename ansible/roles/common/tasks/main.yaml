@@ -4,8 +4,68 @@
     name: "{{ item }}"
     state: present
   loop:
-    - package1
-    - package2
-    - package3
+    - docker
+    - kubectl
+    - helm
+    - ansible
+    - terraform
+    - prometheus
+    - prometheus-node-exporter
 
-# Add more common tasks as needed
+- name: Update system packages
+  ansible.builtin.package:
+    name: "*"
+    state: latest
+
+- name: Set timezone to UTC
+  ansible.builtin.timezone:
+    timezone: UTC
+
+- name: Install NTP package
+  ansible.builtin.package:
+    name: ntp
+    state: present
+
+- name: Configure NTP servers
+  ansible.builtin.lineinfile:
+    path: /etc/ntp.conf
+    line: "server pool.ntp.org iburst"
+    insertbefore: EOF
+
+- name: Set hostname
+  ansible.builtin.hostname:
+    name: web-server
+
+- name: Disable root login via SSH
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+
+- name: Disable password authentication
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^PasswordAuthentication"
+    line: "PasswordAuthentication no"
+
+- name: Enable key-based authentication
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#PubkeyAuthentication"
+    line: "PubkeyAuthentication yes"
+
+- name: Restart SSH service
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+
+- name: Configure firewall rules
+  ansible.builtin.firewalld:
+    service: "{{ item }}"
+    state: enabled
+    immediate: yes
+  loop:
+    - ssh
+    - http
+    - https
+

@@ -27,4 +27,57 @@
                 token: "{{ lookup('env', 'KUBE_TOKEN') }}"
         state: present
 
-    # Add more tasks to deploy microservices here
+    - name: Deploy Frontend Microservice
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'frontend.yaml') }}"
+        kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
+
+    - name: Deploy Carts Microservice
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'carts.yaml') }}"
+        kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
+
+    - name: Deploy Catalogue Microservice
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'catalogue.yaml') }}"
+        kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
+
+    - name: Deploy Orders Microservice
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'orders.yaml') }}"
+        kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
+
+    - name: Deploy Payment Microservice
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'payment.yaml') }}"
+        kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
+
+    - name: Deploy Queue-master Microservice
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'queue-master.yaml') }}"
+        kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
+
+    - name: Deploy RabbitMQ Microservice
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'rabbitmq.yaml') }}"
+        kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
+
+    - name: Deploy Shipping Microservice
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'shipping.yaml') }}"
+        kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
+
+    - name: Deploy User Microservice
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'user.yaml') }}"
+        kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
+

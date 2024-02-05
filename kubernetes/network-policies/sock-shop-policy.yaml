@@ -11,9 +11,13 @@ spec:
   - Egress
   ingress:
   - from:
-    - podSelector:
-        matchLabels:
-          app: sock-shop
+    - podSelector: {}
   egress:
   - to:
-    - podSelector: {}
+    - podSelector:
+        matchLabels:
+          app: database    # Allow egress to the database pod
+    ports:
+    - protocol: TCP
+      port: 5432         # Allow egress traffic on port 5432 (assuming it's the database port)
+

@@ -21,7 +21,7 @@ module "eks_cluster" {
       max_capacity     = 3
       min_capacity     = 1
 
-      instance_type = "t2.micro"  # Replace with your desired instance type
+      instance_type = "t2.micro"  
     }
   }
 }

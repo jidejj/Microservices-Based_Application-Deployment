@@ -9,4 +9,53 @@
   environment:
     VAULT_PASS_FILE: "{{ playbook_dir }}/.ansible-vault-pass"
 
-# Add more tasks for managing secrets with Ansible Vault as needed
+- name: Create new secrets file
+  ansible.builtin.file:
+    path: /Microservices-Based_Application-Deployment/kubernetes/secrets.yaml
+    state: touch
+
+- name: Add initial secrets to the file
+  ansible.builtin.copy:
+    content: "{{ lookup('file', '/Microservices-Based_Application-Deployment/kubernetes/secrets.yaml') }}"
+  register: initial_secrets
+
+- name: Encrypt new secrets file
+  ansible.builtin.command: ansible-vault encrypt /Microservices-Based_Application-Deployment/kubernetes/secrets.yaml --vault-password-file .ansible-vault-pass
+  environment:
+    VAULT_PASS_FILE: "{{ playbook_dir }}/.ansible-vault-pass"
+  when: initial_secrets.changed
+
+- name: Update secrets file
+  ansible.builtin.lineinfile:
+    path: /Microservices-Based_Application-Deployment/kubernetes/secrets.yaml
+    regexp: "^database_password:"
+    line: "database_password: new_password"
+  register: updated_secrets
+
+- name: Re-encrypt updated secrets file
+  ansible.builtin.command: ansible-vault encrypt /Microservices-Based_Application-Deployment/kubernetes/secrets.yaml --vault-password-file .ansible-vault-pass
+  environment:
+    VAULT_PASS_FILE: "{{ playbook_dir }}/.ansible-vault-pass"
+  when: updated_secrets.changed
+
+- name: Delete secrets file
+  ansible.builtin.file:
+    path: /Microservices-Based_Application-Deployment/kubernetes/secrets.yaml
+    state: absent
+
+- name: Deploy secrets to Kubernetes
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: my-secrets
+        namespace: sock-shop
+      data:
+        secrets.yml: "{{ lookup('file', '/Microservices-Based_Application-Deployment/kubernetes/secrets.yaml') | b64encode }}"
+
+
+
+
+

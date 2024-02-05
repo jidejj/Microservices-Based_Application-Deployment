@@ -1,17 +1,83 @@
-# Microservices-Based Application Deployment
+# Microservices Deployment Project
 
 ## Overview
-This project aims to deploy a microservices-based application using Kubernetes and Infrastructure as Code (IaaC) approach. The application is based on the Socks Shop example microservice application, and the deployment is orchestrated using various tools such as Terraform, Ansible, Helm, and GitLab CI/CD. The deployment includes setting up a Kubernetes cluster, configuring network security, implementing monitoring and logging solutions, and automating the deployment process.
+This project aims to deploy a microservices-based application using Kubernetes and Infrastructure as Code (IaaC) approach, with an emphasis on readability, maintainability, and DevOps practices. The application is based on the Socks Shop example microservice application, and the deployment is orchestrated using various tools such as Terraform, Ansible, Helm, and GitLab CI/CD. The deployment includes setting up a Kubernetes cluster, configuring network security, implementing monitoring and logging solutions, and automating the deployment process.
 
 ## Project Structure
-The project is structured as follows:
-- `ansible/`: Contains Ansible playbooks and roles for deploying microservices and managing secrets.
-- `helm/`: Contains Helm charts for the microservices.
-- `kubernetes/`: Contains Kubernetes manifests for network policies, ingress rules, and cert-manager deployment.
-- `terraform/`: Contains Terraform configurations for provisioning infrastructure such as EKS cluster, networking, and monitoring tools.
-- `.gitlab-ci.yml`: GitLab CI/CD pipeline definition for automating the deployment process.
-- `.ansible-vault-pass`: Ansible Vault password file.
+The project directory structure is organized as follows:
 
+├── ansible
+│   ├── common
+│   │   └── tasks
+│   │       └── main.yaml
+│   ├── deploy
+│   │   └── tasks
+│   │       └── main.yaml
+│   └── vault
+│       └── tasks
+│           └── main.yaml
+├── helm
+│   └── sock-shop
+│       ├── chart.yaml
+│       ├── templates
+│       │   ├── deployment.yaml
+│       │   └── service.yaml
+│       └── values.yaml
+├── kubernetes
+│   ├── cert-manager
+│   │   └── cert-manager.yaml
+│   ├── ingress
+│   │   └── ingress.yaml
+│   └── network-policies
+│       └── sock-shop-policy.yaml
+└── terraform
+    ├── eks
+    │   ├── main.tf
+    │   ├── outputs.tf
+    │   └── variables.tf
+    ├── prometheus
+    │   ├── main.tf
+    │   ├── outputs.tf
+    │   └── variables.tf
+    └── vault
+        ├── main.tf
+        ├── outputs.tf
+        └── variables.tf
+
+## Project Components
+- Ansible: Used for configuration management and automation.
+- Terraform: Used for provisioning infrastructure on AWS.
+- Helm: Utilized for managing Kubernetes applications via Helm charts.
+- Kubernetes: Orchestrates the microservices application.
+- GitLab CI/CD: Implements Continuous Integration and Deployment pipelines.
+- Prometheus: Used for monitoring Kubernetes services.
+- ELK Stack (Elasticsearch, Fluentd, Kibana): Collects, stores, and visualizes logs.
+- Cert-Manager: Manages Let's Encrypt certificates for HTTPS termination.
+
+## Deployment Process
+1. Infrastructure Provisioning: Use Terraform to provision the Kubernetes cluster on AWS EKS.
+2. Network Security: Implement network policies to secure the infrastructure.
+3. Monitoring: Deploy Prometheus for monitoring Kubernetes services and define alerting rules.
+4. Logging: Deploy the ELK Stack (Elasticsearch, Fluentd, Kibana) for log collection and visualization.
+5. CI/CD Pipeline: Utilize GitLab CI/CD for automated deployment, including linting, testing, building Docker images, and deploying to Kubernetes.
+6. Secrets Management: Use Ansible Vault for encrypting and managing sensitive information.
+7. Microservices Deployment: Deploy microservices using Helm charts, parameterized for easy customization and updates.
+8. HTTPS Termination: Setup Ingress Controller for HTTPS termination and obtain Let's Encrypt certificates.
+9. Additional Configurations: Implement Kubernetes Network Policies, Ingress rules, and integrate with Ansible Vault for secure automation.
+
+## Getting Started
+To deploy the microservices application:
+
+1. Set up the required tools and dependencies (Terraform, Ansible, Helm, etc.).
+2. Configure AWS credentials and variables in Terraform.
+3. Run Terraform scripts to provision the Kubernetes cluster.
+4. Configure network security, monitoring, logging, and CI/CD pipelines.
+5. Deploy microservices using Helm charts with customized configurations.
+6. Configure HTTPS termination and obtain Let's Encrypt certificates.
+7. Manage secrets securely using Ansible Vault.
+8. Monitor the deployed services using Prometheus.
+9. Collect and visualize logs using the ELK Stack.
+    
 ## Deployment Instructions
 To deploy the microservices-based application, follow these steps:
 
@@ -52,5 +118,5 @@ To deploy the microservices-based application, follow these steps:
 - Secrets Management: Sensitive data such as API keys, passwords, and certificates are encrypted using Ansible Vault.
 - CI/CD Automation: The deployment process is automated using GitLab CI/CD, ensuring consistent and reliable deployments.
 
-## Contributors
-Jide Olaniyan (olaniyanjide@hotmail.com)
+## Contributing
+Contributions are welcome! Feel free to submit issues, suggestions, or pull requests
