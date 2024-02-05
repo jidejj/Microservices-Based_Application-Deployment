@@ -5,7 +5,7 @@ This project aims to deploy a microservices-based application using Kubernetes a
 
 ## Project Structure
 The project directory structure is organized as follows:
-
+~~~
 ├── ansible
 │   ├── common
 │   │   └── tasks
